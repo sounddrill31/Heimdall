@@ -45,7 +45,7 @@ namespace Heimdall
 				memset(data, 0, size);
 			}
 
-			~Packet()
+			virtual ~Packet()
 			{
 				delete [] data;
 			}
