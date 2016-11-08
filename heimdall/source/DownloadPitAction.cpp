@@ -148,7 +148,7 @@ int DownloadPitAction::Execute(int argc, char **argv)
 
 	if (fileSize > 0)
 	{
-		if (fwrite(pitBuffer, 1, fileSize, outputPitFile) != fileSize)
+		if (fwrite(pitBuffer, 1, fileSize, outputPitFile) != static_cast<size_t>(fileSize))
 		{
 			Interface::PrintError("Failed to write PIT data to output file.\n");
 			success = false;

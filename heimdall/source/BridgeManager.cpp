@@ -749,7 +749,7 @@ bool BridgeManager::ReceivePacket(InboundPacket *packet, int timeout, int emptyT
 	if (receivedSize < 0)
 		return (false);
 
-	if (receivedSize != packet->GetSize() && !packet->IsSizeVariable())
+	if (static_cast<unsigned int>(receivedSize) != packet->GetSize() && !packet->IsSizeVariable())
 	{
 		if (verbose)
 			Interface::PrintError("Incorrect packet size received - expected size = %d, received size = %d.\n", packet->GetSize(), receivedSize);
