@@ -909,7 +909,7 @@ void MainWindow::StartFlash(void)
 
 	const FirmwareInfo& firmwareInfo = workingPackageData.GetFirmwareInfo();
 	const QList<FileInfo>& fileInfos = firmwareInfo.GetFileInfos();
-	
+
 	QStringList arguments;
 	arguments.append("flash");
 
@@ -922,8 +922,7 @@ void MainWindow::StartFlash(void)
 	for (int i = 0; i < fileInfos.length(); i++)
 	{
 		QString flag;
-		flag.sprintf("--%u", fileInfos[i].GetPartitionId());
-
+		flag = QString::asprintf("--%u", fileInfos[i].GetPartitionId());
 		arguments.append(flag);
 		arguments.append(fileInfos[i].GetFilename());
 	}
