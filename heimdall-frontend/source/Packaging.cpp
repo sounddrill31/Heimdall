@@ -690,118 +690,116 @@ QString Packaging::ClashlessFilename(const QList<FileInfo>& fileInfos, int fileI
 			renameIndex++;
 	}
 
-	if (renameIndex > 0)
+	if (renameIndex <= 0)
 	{
-		int lastPeriodIndex = filename.lastIndexOf(QChar('.'));
-		QString shortFilename;
-		QString fileType;
+		return (filename);
+	}
 
-		if (lastPeriodIndex >= 0)
+	int lastPeriodIndex = filename.lastIndexOf(QChar('.'));
+	QString shortFilename;
+	QString fileType;
+
+	if (lastPeriodIndex >= 0)
+	{
+		shortFilename = filename.left(lastPeriodIndex);
+		fileType = filename.mid(lastPeriodIndex);
+	}
+	else
+	{
+		shortFilename = filename;
+	}
+
+	unsigned int renameIndexOffset = 0;
+	bool validIndexOffset = true;
+
+	// Before we append a rename index we must ensure it doesn't produce further collisions.
+	for (int i = 0; i < fileInfos.length(); i++)
+	{
+		int lastSlash = fileInfos[i].GetFilename().lastIndexOf('/');
+
+		if (lastSlash < 0)
+			lastSlash = fileInfos[i].GetFilename().lastIndexOf('\\');
+
+		QString otherFilename = fileInfos[i].GetFilename().mid(lastSlash + 1);
+
+		if (otherFilename.length() > filename.length() + 1)
 		{
-			shortFilename = filename.left(lastPeriodIndex);
-			fileType = filename.mid(lastPeriodIndex);
-		}
-		else
-		{
-			shortFilename = filename;
-		}
+			QString trimmedOtherFilename = otherFilename.left(shortFilename.length());
 
-		unsigned int renameIndexOffset = 0;
-		bool validIndexOffset = true;
-
-		// Before we append a rename index we must ensure it doesn't produce further collisions.
-		for (int i = 0; i < fileInfos.length(); i++)
-		{
-			int lastSlash = fileInfos[i].GetFilename().lastIndexOf('/');
-
-			if (lastSlash < 0)
-				lastSlash = fileInfos[i].GetFilename().lastIndexOf('\\');
-
-			QString otherFilename = fileInfos[i].GetFilename().mid(lastSlash + 1);
-
-			if (otherFilename.length() > filename.length() + 1)
+			if (shortFilename == trimmedOtherFilename)
 			{
-				QString trimmedOtherFilename = otherFilename.left(shortFilename.length());
+				lastPeriodIndex = otherFilename.lastIndexOf(QChar('.'));
+				QString shortOtherFilename;
 
-				if (shortFilename == trimmedOtherFilename)
+				if (lastPeriodIndex >= 0)
+					shortOtherFilename = otherFilename.left(lastPeriodIndex);
+				else
+					shortOtherFilename = otherFilename;
+
+				QRegExp renameExp("-[0-9]+");
+
+				if (renameExp.lastIndexIn(shortOtherFilename) == shortFilename.length())
 				{
-					lastPeriodIndex = otherFilename.lastIndexOf(QChar('.'));
-					QString shortOtherFilename;
+					unsigned int trailingInteger = shortOtherFilename.mid(shortFilename.length() + 1).toUInt(&validIndexOffset);
 
-					if (lastPeriodIndex >= 0)
-						shortOtherFilename = otherFilename.left(lastPeriodIndex);
-					else
-						shortOtherFilename = otherFilename;
+					if (!validIndexOffset)
+						break;
 
-					QRegExp renameExp("-[0-9]+");
-					
-					if (renameExp.lastIndexIn(shortOtherFilename) == shortFilename.length())
-					{
-						unsigned int trailingInteger = shortOtherFilename.mid(shortFilename.length() + 1).toUInt(&validIndexOffset);
-
-						if (!validIndexOffset)
-							break;
-
-						if (trailingInteger > renameIndexOffset)
-							renameIndexOffset = trailingInteger;
-					}
-				}
-			}
-		}
-
-		if (validIndexOffset)
-		{
-			// Ensure renaming won't involve integer overflow!
-			if (renameIndex > static_cast<unsigned int>(-1) - renameIndexOffset)
-				validIndexOffset = false;
-		}
-
-		if (validIndexOffset)
-		{
-			shortFilename.append(QChar('-'));
-			shortFilename.append(QString::number(renameIndexOffset + renameIndex));
-
-			return (shortFilename + fileType);
-		}
-		else
-		{
-			// Fallback behaviour... an absolutely terrible brute force implementation!
-			QString filename;
-			QString renamePrefix;
-
-			for (;;)
-			{
-				renamePrefix.append(QChar('+'));
-
-				for (unsigned int i = 0; i < static_cast<unsigned int>(-1); i++)
-				{
-					filename = shortFilename + renamePrefix + QString::number(i) + fileType;
-
-					bool valid = true;
-
-					for (int i = 0; i < fileInfos.length(); i++)
-					{
-						int lastSlash = fileInfos[i].GetFilename().lastIndexOf('/');
-
-						if (lastSlash < 0)
-							lastSlash = fileInfos[i].GetFilename().lastIndexOf('\\');
-
-						if (filename == fileInfos[i].GetFilename().mid(lastSlash + 1))
-						{
-							valid = false;
-							break;
-						}
-					}
-
-					if (valid)
-						return (filename);
+					if (trailingInteger > renameIndexOffset)
+						renameIndexOffset = trailingInteger;
 				}
 			}
 		}
 	}
+
+	if (validIndexOffset)
+	{
+		// Ensure renaming won't involve integer overflow!
+		if (renameIndex > static_cast<unsigned int>(-1) - renameIndexOffset)
+			validIndexOffset = false;
+	}
+
+	if (validIndexOffset)
+	{
+		shortFilename.append(QChar('-'));
+		shortFilename.append(QString::number(renameIndexOffset + renameIndex));
+
+		return (shortFilename + fileType);
+	}
 	else
 	{
-		return (filename);
+		// Fallback behaviour... an absolutely terrible brute force implementation!
+		QString filename;
+		QString renamePrefix;
+
+		for (;;)
+		{
+			renamePrefix.append(QChar('+'));
+
+			for (unsigned int i = 0; i < static_cast<unsigned int>(-1); i++)
+			{
+				filename = shortFilename + renamePrefix + QString::number(i) + fileType;
+
+				bool valid = true;
+
+				for (int i = 0; i < fileInfos.length(); i++)
+				{
+					int lastSlash = fileInfos[i].GetFilename().lastIndexOf('/');
+
+					if (lastSlash < 0)
+						lastSlash = fileInfos[i].GetFilename().lastIndexOf('\\');
+
+					if (filename == fileInfos[i].GetFilename().mid(lastSlash + 1))
+					{
+						valid = false;
+						break;
+					}
+				}
+
+				if (valid)
+					return (filename);
+			}
+		}
 	}
 }
 
@@ -823,113 +821,111 @@ QString Packaging::ClashlessFilename(const QList<FileInfo>& fileInfos, const QSt
 			renameIndex++;
 	}
 
-	if (renameIndex > 0)
+	if (renameIndex <= 0)
 	{
-		int lastPeriodIndex = filename.lastIndexOf(QChar('.'));
-		QString shortFilename;
-		QString fileType;
+		return (filename);
+	}
 
-		if (lastPeriodIndex >= 0)
-		{
-			shortFilename = filename.left(lastPeriodIndex);
-			fileType = filename.mid(lastPeriodIndex);
-		}
-		else
-		{
-			shortFilename = filename;
-		}
+	int lastPeriodIndex = filename.lastIndexOf(QChar('.'));
+	QString shortFilename;
+	QString fileType;
 
-		unsigned int renameIndexOffset = 0;
-		bool validIndexOffset = true;
-
-		// Before we append a rename index we must ensure it doesn't produce further collisions.
-		for (int i = 0; i < fileInfos.length(); i++)
-		{
-			int lastSlash = fileInfos[i].GetFilename().lastIndexOf('/');
-
-			if (lastSlash < 0)
-				lastSlash = fileInfos[i].GetFilename().lastIndexOf('\\');
-
-			QString otherFilename = fileInfos[i].GetFilename().mid(lastSlash + 1);
-
-			if (otherFilename.length() > filename.length() + 1)
-			{
-				QString trimmedOtherFilename = otherFilename.left(filename.length());
-
-				if (filename == trimmedOtherFilename)
-				{
-					lastPeriodIndex = otherFilename.lastIndexOf(QChar('.'));
-					QString shortOtherFilename;
-
-					if (lastPeriodIndex >= 0)
-						shortOtherFilename = otherFilename.left(lastPeriodIndex);
-					else
-						shortOtherFilename = otherFilename;
-
-					QRegExp renameExp("-[0-9]+");
-					
-					if (renameExp.lastIndexIn(shortOtherFilename) == shortFilename.length())
-					{
-						unsigned int trailingInteger = shortOtherFilename.mid(shortFilename.length() + 1).toUInt(&validIndexOffset);
-
-						if (!validIndexOffset)
-							break;
-
-						if (trailingInteger > renameIndexOffset)
-							renameIndexOffset = trailingInteger;
-					}
-				}
-			}
-		}
-
-		if (validIndexOffset)
-		{
-			// Ensure renaming won't involve integer overflow!
-			if (renameIndex > static_cast<unsigned int>(-1) - renameIndexOffset)
-				validIndexOffset = false;
-		}
-
-		if (validIndexOffset)
-		{
-			shortFilename.append(QChar('-'));
-			shortFilename.append(QString::number(renameIndexOffset + renameIndex));
-
-			return (shortFilename + fileType);
-		}
-		else
-		{
-			// Fallback behaviour, brute-force/semi-random.
-			bool valid;
-			QString filename;
-
-			do
-			{
-				valid = true;
-
-				filename = shortFilename + "-";
-				for (int i = 0; i < 8; i++)
-					filename.append(QChar(QRandomGenerator::global()->bounded(('Z' - 'A' + 1) + 'A')));
-
-				for (int i = 0; i < fileInfos.length(); i++)
-				{
-					int lastSlash = fileInfos[i].GetFilename().lastIndexOf('/');
-
-					if (lastSlash < 0)
-						lastSlash = fileInfos[i].GetFilename().lastIndexOf('\\');
-
-					if (filename == fileInfos[i].GetFilename().mid(lastSlash + 1))
-					{
-						valid = false;
-						break;
-					}
-				}
-			} while (!valid);
-
-			return (filename);
-		}
+	if (lastPeriodIndex >= 0)
+	{
+		shortFilename = filename.left(lastPeriodIndex);
+		fileType = filename.mid(lastPeriodIndex);
 	}
 	else
 	{
+		shortFilename = filename;
+	}
+
+	unsigned int renameIndexOffset = 0;
+	bool validIndexOffset = true;
+
+	// Before we append a rename index we must ensure it doesn't produce further collisions.
+	for (int i = 0; i < fileInfos.length(); i++)
+	{
+		int lastSlash = fileInfos[i].GetFilename().lastIndexOf('/');
+
+		if (lastSlash < 0)
+			lastSlash = fileInfos[i].GetFilename().lastIndexOf('\\');
+
+		QString otherFilename = fileInfos[i].GetFilename().mid(lastSlash + 1);
+
+		if (otherFilename.length() > filename.length() + 1)
+		{
+			QString trimmedOtherFilename = otherFilename.left(filename.length());
+
+			if (filename == trimmedOtherFilename)
+			{
+				lastPeriodIndex = otherFilename.lastIndexOf(QChar('.'));
+				QString shortOtherFilename;
+
+				if (lastPeriodIndex >= 0)
+					shortOtherFilename = otherFilename.left(lastPeriodIndex);
+				else
+					shortOtherFilename = otherFilename;
+
+				QRegExp renameExp("-[0-9]+");
+
+				if (renameExp.lastIndexIn(shortOtherFilename) == shortFilename.length())
+				{
+					unsigned int trailingInteger = shortOtherFilename.mid(shortFilename.length() + 1).toUInt(&validIndexOffset);
+
+					if (!validIndexOffset)
+						break;
+
+					if (trailingInteger > renameIndexOffset)
+						renameIndexOffset = trailingInteger;
+				}
+			}
+		}
+	}
+
+	if (validIndexOffset)
+	{
+		// Ensure renaming won't involve integer overflow!
+		if (renameIndex > static_cast<unsigned int>(-1) - renameIndexOffset)
+			validIndexOffset = false;
+	}
+
+	if (validIndexOffset)
+	{
+		shortFilename.append(QChar('-'));
+		shortFilename.append(QString::number(renameIndexOffset + renameIndex));
+
+		return (shortFilename + fileType);
+	}
+	else
+	{
+		// Fallback behaviour, brute-force/semi-random.
+		bool valid;
+		QString filename;
+
+		do
+		{
+			valid = true;
+
+			filename = shortFilename + "-";
+			for (int i = 0; i < 8; i++)
+				filename.append(QChar(QRandomGenerator::global()->bounded(('Z' - 'A' + 1) + 'A')));
+
+			for (int i = 0; i < fileInfos.length(); i++)
+			{
+				int lastSlash = fileInfos[i].GetFilename().lastIndexOf('/');
+
+				if (lastSlash < 0)
+					lastSlash = fileInfos[i].GetFilename().lastIndexOf('\\');
+
+				if (filename == fileInfos[i].GetFilename().mid(lastSlash + 1))
+				{
+					valid = false;
+					break;
+				}
+			}
+		} while (!valid);
+
 		return (filename);
 	}
 }
