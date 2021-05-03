@@ -32,6 +32,7 @@
 #include <QDateTime>
 #include <QDir>
 #include <QProgressDialog>
+#include <QRandomGenerator>
 
 // Heimdall Frontend
 #include "Alerts.h"
@@ -907,7 +908,7 @@ QString Packaging::ClashlessFilename(const QList<FileInfo>& fileInfos, const QSt
 
 				filename = shortFilename + "-";
 				for (int i = 0; i < 8; i++)
-					filename.append(QChar(qrand() % ('Z' - 'A' + 1) + 'A'));
+					filename.append(QChar(QRandomGenerator::global()->bounded(('Z' - 'A' + 1) + 'A')));
 
 				for (int i = 0; i < fileInfos.length(); i++)
 				{
