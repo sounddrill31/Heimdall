@@ -47,16 +47,16 @@ const char *actionUsage = "Usage: heimdall <action> <action arguments>\n";
 
 const char *releaseInfo = "Heimdall %s\n\n\
 Copyright (c) 2010-2017 Benjamin Dobell, Glass Echidna\n\
-http://www.glassechidna.com.au/\n\n\
+https://www.glassechidna.com.au/\n\n\
 This software is provided free of charge. Copying and redistribution is\nencouraged.\n\n\
 If you appreciate this software and you would like to support future\ndevelopment please consider donating:\n\
-http://www.glassechidna.com.au/donate/\n\n";
+https://www.glassechidna.com.au/donate/\n\n";
 
-static const char *extraInfo = "Heimdall utilises libusbx for all USB communication:\n\
-    http://www.libusb.org/\n\
+static const char *extraInfo = "Heimdall utilises libusb for all USB communication:\n\
+    https://www.libusb.info/\n\
 \n\
-libusbx is licensed under the LGPL-2.1:\n\
-    http://www.gnu.org/licenses/licenses.html#LGPL\n\n";
+libusb is licensed under the LGPL-2.1:\n\
+    https://www.gnu.org/licenses/licenses.html#LGPL\n\n";
 
 void populateActionMap(void)
 {
