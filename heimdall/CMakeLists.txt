@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 3.0.0)
 
 project(heimdall)
 
-if((NOT ${CMAKE_SYSTEM_NAME} MATCHES "Linux") AND (NOT DEFINED libusb_USE_STATIC_LIBS))
-    set(libusb_USE_STATIC_LIBS YES)
-endif((NOT ${CMAKE_SYSTEM_NAME} MATCHES "Linux") AND (NOT DEFINED libusb_USE_STATIC_LIBS))
-
 find_package(libusb REQUIRED)
 
 set(LIBPIT_INCLUDE_DIRS
