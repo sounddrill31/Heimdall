@@ -48,7 +48,7 @@ use_large_files(heimdall YES)
 add_executable(heimdall ${HEIMDALL_SOURCE_FILES})
 
 target_link_libraries(heimdall PRIVATE pit)
-target_link_libraries(heimdall PRIVATE ${LIBUSB_LIBRARY})
+target_link_libraries(heimdall PRIVATE ${LIBUSB_LIBRARIES})
 install (TARGETS heimdall
 		RUNTIME	DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
 		LIBRARY	DESTINATION ${CMAKE_INSTALL_LIBDIR})
