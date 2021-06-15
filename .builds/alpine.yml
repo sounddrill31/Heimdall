@@ -8,8 +8,13 @@ artifacts:
   - Heimdall/build/bin/heimdall-frontend
 
 packages:
+  - make
   - cmake
-  - libusb
+  - gcc
+  - g++
+  - libc-dev
+  - qt5-qtbase-dev
+  - libusb-dev
 
 tasks:
   - build: |
