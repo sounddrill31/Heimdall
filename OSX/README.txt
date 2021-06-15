@@ -1,5 +1,5 @@
 Heimdall (c) 2010-2017 Benjamin Dobell, Glass Echidna
-http://www.glassechidna.com.au/products/heimdall/
+https://www.glassechidna.com.au/products/heimdall/
 
 DISCLAIMER:
 
@@ -295,8 +295,8 @@ How to Create a Heimdall Firmware Package:
         Homepage - Here you can enter your personal URL or a URL particularly
             pertaining to the firmware being packaged. The URL must be well
             formed for it to work. An example of a well formed URL is
-            "http://www.glassechidna.com.au/products/heimdall/". It is
-            important to include "http://" in order to specify the protocol as
+            "https://www.glassechidna.com.au/products/heimdall/". It is
+            important to include "https://" in order to specify the protocol as
             other protocols such as "ftp://" are equally valid although
             unlikely to be used.
 
@@ -304,8 +304,8 @@ How to Create a Heimdall Firmware Package:
             make donations for the effort you've put into developing your
             firmware. Once again the URL must be well formed but there is no
             requirement on how your donation page should work. For instance
-            both "http://www.glassechidna.com.au/donate/" and
-            "http://forum.xda-developers.com/donatetome.php?u=2710388" are
+            both "https://www.glassechidna.com.au/donate/" and
+            "https://forum.xda-developers.com/donatetome.php?u=2710388" are
             equally valid.
 
     Developer Info:
@@ -396,8 +396,8 @@ Nonetheless the following is an example of a valid firmware.xml file.
 		<name>Benjamin Dobell</name>
 		<name>Hedonism Bot</name>
 	</developers>
-	<url>http://www.glassechidna.com.au/</url>
-	<donateurl>http://www.glassechidna.com.au/donate/</donateurl>
+	<url>https://www.glassechidna.com.au/</url>
+	<donateurl>https://www.glassechidna.com.au/donate/</donateurl>
 	<devices>
 		<device>
 			<manufacturer>Samsung</manufacturer>
@@ -479,7 +479,7 @@ be included.
 
 Appendix B - Installing Heimdall Suite from Source
 
-    1. Open Terminal and install dependencies using Homebrew (http://brew.sh)
+    1. Open Terminal and install dependencies using Homebrew (https://brew.sh)
 
         brew install libusb qt5 cmake
 
