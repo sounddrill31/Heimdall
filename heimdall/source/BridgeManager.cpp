@@ -265,7 +265,7 @@ bool BridgeManager::SetupDeviceInterface(void)
 
 	if (result != LIBUSB_SUCCESS)
 	{
-		Interface::PrintError("Setting up interface failed!\n");
+		Interface::PrintError("Setting up interface failed with error code %i!\n", result);
 		return (false);
 	}
 
