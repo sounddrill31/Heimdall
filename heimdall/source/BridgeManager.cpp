@@ -259,9 +259,16 @@ bool BridgeManager::ClaimDeviceInterface(void)
 
 bool BridgeManager::SetupDeviceInterface(void)
 {
+	// if altSettingIndex is 0 there should be no need
+	// to set alt_setting(?)
+	if (altSettingIndex == 0)
+		return (true);
+
 	Interface::Print("Setting up interface...\n");
 
-	int result = libusb_set_interface_alt_setting(deviceHandle, interfaceIndex, altSettingIndex);
+	int result = libusb_set_interface_alt_setting(deviceHandle,
+						      interfaceIndex,
+						      altSettingIndex);
 
 	if (result != LIBUSB_SUCCESS)
 	{
