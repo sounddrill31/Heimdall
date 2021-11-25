@@ -25,12 +25,10 @@
 #pragma warning(disable : 4996)
 #endif
 
-#if (!(defined _MSC_VER) || (_MSC_VER < 1700))
-
-#ifndef nullptr
-#define nullptr 0
-#endif
-
+#if defined(_MSC_VER) && (_MSC_VER < 1700)
+# ifndef nullptr
+#  define nullptr 0
+# endif
 #endif
 
 // C/C++ Standard Library
