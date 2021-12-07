@@ -8,12 +8,8 @@ set(LIBPIT_INCLUDE_DIRS
     ../libpit/source)
 
 if(APPLE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-    set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")
     set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lobjc -framework IOKit -framework CoreFoundation")
-else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -D_FILE_OFFSET_BITS=64")
 endif()
 
 if(MINGW)
@@ -46,6 +42,7 @@ set(HEIMDALL_SOURCE_FILES
 include(LargeFiles)
 use_large_files(heimdall YES)
 add_executable(heimdall ${HEIMDALL_SOURCE_FILES})
+target_compile_features(heimdall PRIVATE cxx_std_11)
 
 target_link_libraries(heimdall PRIVATE pit)
 target_link_libraries(heimdall PRIVATE ${LIBUSB_LIBRARIES})
