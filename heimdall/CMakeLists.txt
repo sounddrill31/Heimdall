@@ -76,6 +76,5 @@ target_compile_features(heimdall PRIVATE cxx_std_11)
 target_link_libraries(heimdall PRIVATE pit)
 target_link_libraries(heimdall PRIVATE ${LIBUSB_LIBRARIES})
 install (TARGETS heimdall
-		RUNTIME	DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-		LIBRARY	DESTINATION ${CMAKE_INSTALL_LIBDIR})
-
+    RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})

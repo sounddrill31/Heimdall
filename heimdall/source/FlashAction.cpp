@@ -104,7 +104,7 @@ static bool openFiles(Arguments& arguments, vector<PartitionFile>& partitionFile
 	for (vector<const Argument *>::const_iterator it = arguments.GetArguments().begin(); it != arguments.GetArguments().end(); it++)
 	{
 		const string& argumentName = (*it)->GetName();
-		
+
 		// The only way an argument could exist without being in the argument types map is if it's a wild-card.
 		// The "%d" wild-card refers to a partition by identifier, where as the "%s" wild-card refers to a
 		// partition by name.
@@ -164,7 +164,7 @@ static bool sendTotalTransferSize(BridgeManager *bridgeManager, const vector<Par
 	}
 
 	bool success;
-	
+
 	TotalBytesPacket *totalBytesPacket = new TotalBytesPacket(totalBytes);
 	success = bridgeManager->SendPacket(totalBytesPacket);
 	delete totalBytesPacket;
@@ -251,7 +251,7 @@ static bool flashPitData(BridgeManager *bridgeManager, const PitData *pitData)
 static bool flashFile(BridgeManager *bridgeManager, const PartitionFlashInfo& partitionFlashInfo)
 {
 	if (partitionFlashInfo.pitEntry->GetBinaryType() == PitEntry::kBinaryTypeCommunicationProcessor) // Modem
-	{			
+	{
 		Interface::Print("Uploading %s\n", partitionFlashInfo.pitEntry->GetPartitionName());
 
 		if (bridgeManager->SendFile(partitionFlashInfo.file, EndModemFileTransferPacket::kDestinationModem,
@@ -459,7 +459,7 @@ int FlashAction::Execute(int argc, char **argv)
 	bool resume = arguments.GetArgument("resume") != nullptr;
 	bool verbose = arguments.GetArgument("verbose") != nullptr;
 	bool tflash = arguments.GetArgument("tflash") != nullptr;
-	
+
 	if (arguments.GetArgument("stdout-errors") != nullptr)
 		Interface::SetStdoutErrors(true);
 
@@ -511,7 +511,7 @@ int FlashAction::Execute(int argc, char **argv)
 	}
 
 	// Open files
-	
+
 	FILE *pitFile = nullptr;
 	vector<PartitionFile> partitionFiles;
 
@@ -558,7 +558,7 @@ int FlashAction::Execute(int argc, char **argv)
 	if (success)
 	{
 		PitData *pitData = getPitData(bridgeManager, pitFile, repartition);
-	
+
 		if (pitData)
 			success = flashPartitions(bridgeManager, partitionFiles, pitData, repartition);
 		else
@@ -571,7 +571,7 @@ int FlashAction::Execute(int argc, char **argv)
 		success = false;
 
 	delete bridgeManager;
-	
+
 	closeFiles(partitionFiles, pitFile);
 
 	return (success ? 0 : 1);
