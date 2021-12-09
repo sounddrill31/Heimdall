@@ -62,11 +62,13 @@ struct PartitionFile
 {
 	const char *argumentName;
 	FILE *file;
+	unsigned long fileSize;
 
-	PartitionFile(const char *argumentName, FILE *file)
+	PartitionFile(const char *argumentName, FILE *file, unsigned long fileSize)
 	{
 		this->argumentName = argumentName;
 		this->file = file;
+		this->fileSize = fileSize;
 	}
 };
 
@@ -113,6 +115,9 @@ static bool openFiles(Arguments& arguments, vector<PartitionFile>& partitionFile
 		{
 			const StringArgument *stringArgument = static_cast<const StringArgument *>(*it);
 			FILE *file = FileOpen(stringArgument->GetValue().c_str(), "rb");
+			FileSeek(file, 0, SEEK_END);
+			unsigned long fileSize = (unsigned long)FileTell(file);
+			FileRewind(file);
 
 			if (!file)
 			{
@@ -120,7 +125,7 @@ static bool openFiles(Arguments& arguments, vector<PartitionFile>& partitionFile
 				return (false);
 			}
 
-			partitionFiles.push_back(PartitionFile(argumentName.c_str(), file));
+			partitionFiles.push_back(PartitionFile(argumentName.c_str(), file, fileSize));
 		}
 	}
 
@@ -151,9 +156,7 @@ static bool sendTotalTransferSize(BridgeManager *bridgeManager, const vector<Par
 
 	for (vector<PartitionFile>::const_iterator it = partitionFiles.begin(); it != partitionFiles.end(); it++)
 	{
-		FileSeek(it->file, 0, SEEK_END);
-		totalBytes += (unsigned long)FileTell(it->file);
-		FileRewind(it->file);
+		totalBytes += it->fileSize;
 	}
 
 	if (repartition)
@@ -291,6 +294,25 @@ static bool flashPartitions(BridgeManager *bridgeManager, const vector<Partition
 	// Map the files being flashed to partitions stored in the PIT file.
 	if (!setupPartitionFlashInfo(partitionFiles, pitData, partitionFlashInfos))
 		return (false);
+
+	/* Verify that the files we want to flash fit in partitions */
+	for (vector<PartitionFile>::const_iterator it = partitionFiles.begin(); it != partitionFiles.end(); it++)
+	{
+		const PitEntry *part = pitData->FindEntry(it->argumentName);
+		if (part->GetDeviceType() != PitEntry::kDeviceTypeMMC &&
+		    part->GetDeviceType() != PitEntry::kDeviceTypeMMC4096)
+			continue;
+		unsigned long partitionSize = part->GetBlockCount();
+		unsigned int blockSize = 512;
+		if (part->GetDeviceType() == PitEntry::kDeviceTypeMMC4096)
+			blockSize = 4096;
+		if (partitionSize > 0 && it->fileSize > partitionSize*blockSize)
+		{
+			Interface::PrintError("%s partition is too small for specified file\n",
+					      it->argumentName);
+			return (false);
+		}
+	}
 
 	// If we're repartitioning then we need to flash the PIT file first (if it is listed in the PIT file).
 	if (repartition)
