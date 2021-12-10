@@ -262,6 +262,10 @@ void Interface::PrintPit(const PitData *pitData)
 				Interface::Print("All (?)");
 				break;
 
+			case PitEntry::kDeviceTypeMMC4096:
+				Interface::Print("MMC 4096");
+				break;
+
 			default:
 				Interface::Print("Unknown");
 				break;
