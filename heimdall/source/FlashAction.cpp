@@ -309,6 +309,7 @@ static bool flashPartitions(BridgeManager *bridgeManager, const vector<Partition
 			unsigned int blockSize = 512;
 			if (part->GetDeviceType() == PitEntry::kDeviceTypeMMC4096)
 				blockSize = 4096;
+			printf("Partition %s: size %lu, size in PIT: %lu\n", it->argumentName, it->fileSize, partitionSize*blockSize);
 			if (partitionSize > 0 && it->fileSize > partitionSize*blockSize)
 			{
 				Interface::PrintError("%s partition is too small for specified file\n",
