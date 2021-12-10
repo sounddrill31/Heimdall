@@ -66,17 +66,10 @@ PitData::PitData()
 {
 	entryCount = 0;
 
-	unknown1 = 0;
-	unknown2 = 0;
+	com_tar2[0] = '\0';
+	cpu_bl_id[0] = '\0';
 
-	unknown3 = 0;
-	unknown4 = 0;
-
-	unknown5 = 0;
-	unknown6 = 0;
-
-	unknown7 = 0;
-	unknown8 = 0;
+	unknown_version = 0;
 }
 
 PitData::~PitData()
@@ -98,17 +91,14 @@ bool PitData::Unpack(const unsigned char *data)
 
 	entries.resize(entryCount);
 
-	unknown1 = PitData::UnpackInteger(data, 8);
-	unknown2 = PitData::UnpackInteger(data, 12);
+	if (!memcpy(com_tar2, &data[8], 8))
+		return (false);
+	com_tar2[8]='\0';
+	if (!memcpy(cpu_bl_id, &data[16], 8))
+		return (false);
+	cpu_bl_id[8]='\0';
 
-	unknown3 = PitData::UnpackShort(data, 16);
-	unknown4 = PitData::UnpackShort(data, 18);
-
-	unknown5 = PitData::UnpackShort(data, 20);
-	unknown6 = PitData::UnpackShort(data, 22);
-
-	unknown7 = PitData::UnpackShort(data, 24);
-	unknown8 = PitData::UnpackShort(data, 26);
+	unknown_version = PitData::UnpackShort(data, 24);
 
 	unsigned int integerValue;
 	unsigned int entryOffset;
@@ -160,17 +150,10 @@ void PitData::Pack(unsigned char *data) const
 
 	PitData::PackInteger(data, 4, entryCount);
 
-	PitData::PackInteger(data, 8, unknown1);
-	PitData::PackInteger(data, 12, unknown2);
+	memcpy(&data[8], com_tar2, 8);
+	memcpy(&data[16], cpu_bl_id, 8);
 
-	PitData::PackShort(data, 16, unknown3);
-	PitData::PackShort(data, 18, unknown4);
-
-	PitData::PackShort(data, 20, unknown5);
-	PitData::PackShort(data, 22, unknown6);
-
-	PitData::PackShort(data, 24, unknown7);
-	PitData::PackShort(data, 26, unknown8);
+	PitData::PackShort(data, 24, unknown_version);
 
 	int entryOffset;
 
@@ -201,9 +184,10 @@ void PitData::Pack(unsigned char *data) const
 
 bool PitData::Matches(const PitData *otherPitData) const
 {
-	if (entryCount == otherPitData->entryCount && unknown1 == otherPitData->unknown1 && unknown2 == otherPitData->unknown2
-		&& unknown3 == otherPitData->unknown3 && unknown4 == otherPitData->unknown4 && unknown5 == otherPitData->unknown5
-		&& unknown6 == otherPitData->unknown6 && unknown7 == otherPitData->unknown7 && unknown8 == otherPitData->unknown8)
+	if (entryCount == otherPitData->entryCount &&
+	    (strncmp(com_tar2, otherPitData->com_tar2, 8) == 0) &&
+	    (strncmp(cpu_bl_id, otherPitData->cpu_bl_id, 8) == 0) &&
+	    unknown_version == otherPitData->unknown_version)
 	{
 		for (unsigned int i = 0; i < entryCount; i++)
 		{
@@ -223,17 +207,11 @@ void PitData::Clear(void)
 {
 	entryCount = 0;
 
-	unknown1 = 0;
-	unknown2 = 0;
+	com_tar2[0] = '\0';
 
-	unknown3 = 0;
-	unknown4 = 0;
+	cpu_bl_id[0] = '\0';
 
-	unknown5 = 0;
-	unknown6 = 0;
-
-	unknown7 = 0;
-	unknown8 = 0;
+	unknown_version = 0;
 
 	for (unsigned int i = 0; i < entries.size(); i++)
 		delete entries[i];

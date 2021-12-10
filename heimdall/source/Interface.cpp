@@ -207,16 +207,11 @@ void Interface::PrintDeviceDetectionFailed(void)
 
 void Interface::PrintPit(const PitData *pitData)
 {
+	Interface::Print("--- PIT Header ---\n");
 	Interface::Print("Entry Count: %d\n", pitData->GetEntryCount());
-
-	Interface::Print("Unknown 1: %d\n", pitData->GetUnknown1());
-	Interface::Print("Unknown 2: %d\n", pitData->GetUnknown2());
-	Interface::Print("Unknown 3: %d\n", pitData->GetUnknown3());
-	Interface::Print("Unknown 4: %d\n", pitData->GetUnknown4());
-	Interface::Print("Unknown 5: %d\n", pitData->GetUnknown5());
-	Interface::Print("Unknown 6: %d\n", pitData->GetUnknown6());
-	Interface::Print("Unknown 7: %d\n", pitData->GetUnknown7());
-	Interface::Print("Unknown 8: %d\n", pitData->GetUnknown8());
+	Interface::Print("Unknown string: %s\n", pitData->GetComTar2());
+	Interface::Print("CPU/bootloader tag: %s\n", pitData->GetCpuBlId());
+	Interface::Print("Version(?): 0x%04x\n", pitData->GetUnknown());
 
 	for (unsigned int i = 0; i < pitData->GetEntryCount(); i++)
 	{
