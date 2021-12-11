@@ -48,10 +48,11 @@ Arguments:\n\
     --repartition --pit <filename> [--<partition name> <filename> ...]\n\
     [--<partition identifier> <filename> ...] [--verbose] [--no-reboot]\n\
     [--resume] [--stdout-errors] [--usb-log-level <none/error/warning/debug>]\n\
-    [--tflash]\n\
+    [--tflash] [--skip-size-check]\n\
 Description: Flashes one or more firmware files to your phone. Partition names\n\
     (or identifiers) can be obtained by executing the print-pit action.\n\
     T-Flash mode allows to flash the inserted SD-card instead of the internal MMC.\n\
+    Use --skip-size-check to not verify that files fit in the specified partition.\n\
 Note: --no-reboot causes the device to remain in download mode after the action\n\
       is completed. If you wish to perform another action whilst remaining in\n\
       download mode, then the following action must specify the --resume flag.\n\
@@ -287,7 +288,7 @@ static bool flashFile(BridgeManager *bridgeManager, const PartitionFlashInfo& pa
 	}
 }
 
-static bool flashPartitions(BridgeManager *bridgeManager, const vector<PartitionFile>& partitionFiles, const PitData *pitData, bool repartition)
+static bool flashPartitions(BridgeManager *bridgeManager, const vector<PartitionFile>& partitionFiles, const PitData *pitData, bool repartition, bool skip_size_check)
 {
 	vector<PartitionFlashInfo> partitionFlashInfos;
 
@@ -296,21 +297,24 @@ static bool flashPartitions(BridgeManager *bridgeManager, const vector<Partition
 		return (false);
 
 	/* Verify that the files we want to flash fit in partitions */
-	for (vector<PartitionFile>::const_iterator it = partitionFiles.begin(); it != partitionFiles.end(); it++)
+	if (!skip_size_check)
 	{
-		const PitEntry *part = pitData->FindEntry(it->argumentName);
-		if (part->GetDeviceType() != PitEntry::kDeviceTypeMMC &&
-		    part->GetDeviceType() != PitEntry::kDeviceTypeMMC4096)
-			continue;
-		unsigned long partitionSize = part->GetBlockCount();
-		unsigned int blockSize = 512;
-		if (part->GetDeviceType() == PitEntry::kDeviceTypeMMC4096)
-			blockSize = 4096;
-		if (partitionSize > 0 && it->fileSize > partitionSize*blockSize)
+		for (vector<PartitionFile>::const_iterator it = partitionFiles.begin(); it != partitionFiles.end(); it++)
 		{
-			Interface::PrintError("%s partition is too small for specified file\n",
-					      it->argumentName);
-			return (false);
+			const PitEntry *part = pitData->FindEntry(it->argumentName);
+			if (part->GetDeviceType() != PitEntry::kDeviceTypeMMC &&
+			    part->GetDeviceType() != PitEntry::kDeviceTypeMMC4096)
+				continue;
+			unsigned long partitionSize = part->GetBlockCount();
+			unsigned int blockSize = 512;
+			if (part->GetDeviceType() == PitEntry::kDeviceTypeMMC4096)
+				blockSize = 4096;
+			if (partitionSize > 0 && it->fileSize > partitionSize*blockSize)
+			{
+				Interface::PrintError("%s partition is too small for specified file\n",
+						      it->argumentName);
+				return (false);
+			}
 		}
 	}
 
@@ -453,6 +457,7 @@ int FlashAction::Execute(int argc, char **argv)
 	argumentTypes["stdout-errors"] = kArgumentTypeFlag;
 	argumentTypes["usb-log-level"] = kArgumentTypeString;
 	argumentTypes["tflash"] = kArgumentTypeFlag;
+	argumentTypes["skip-size-check"] = kArgumentTypeFlag;
 
 	argumentTypes["pit"] = kArgumentTypeString;
 	shortArgumentAliases["pit"] = "pit";
@@ -481,6 +486,7 @@ int FlashAction::Execute(int argc, char **argv)
 	bool resume = arguments.GetArgument("resume") != nullptr;
 	bool verbose = arguments.GetArgument("verbose") != nullptr;
 	bool tflash = arguments.GetArgument("tflash") != nullptr;
+	bool skip_size_check = arguments.GetArgument("skip-size-check") != nullptr;
 
 	if (arguments.GetArgument("stdout-errors") != nullptr)
 		Interface::SetStdoutErrors(true);
@@ -582,7 +588,9 @@ int FlashAction::Execute(int argc, char **argv)
 		PitData *pitData = getPitData(bridgeManager, pitFile, repartition);
 
 		if (pitData)
-			success = flashPartitions(bridgeManager, partitionFiles, pitData, repartition);
+			success = flashPartitions(bridgeManager, partitionFiles,
+						  pitData, repartition,
+						  skip_size_check);
 		else
 			success = false;
 
