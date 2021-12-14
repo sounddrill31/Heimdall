@@ -20,7 +20,7 @@ Driver Installation Instructions:
 
     1. Put your device into download mode and plug it in.
 
-    2. Run zadig.exe included in the Drivers subdirectory.
+    2. Download zadig from https://zadig.akeo.ie/downloads/, and run zadig.exe.
 
     3. From the menu chose Options -> List All Devices.
 
