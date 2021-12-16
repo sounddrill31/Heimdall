@@ -1,5 +1,9 @@
 # Heimdall
 
+[![builds.sr.ht status](https://builds.sr.ht/~grimler/Heimdall/commits/ubuntu.yml.svg)](https://builds.sr.ht/~grimler/Heimdall/commits/ubuntu.yml?)
+[![builds.sr.ht status](https://builds.sr.ht/~grimler/Heimdall/commits/archlinux.yml.svg)](https://builds.sr.ht/~grimler/Heimdall/commits/archlinux.yml?)
+[![builds.sr.ht status](https://builds.sr.ht/~grimler/Heimdall/commits/alpine.yml.svg)](https://builds.sr.ht/~grimler/Heimdall/commits/alpine.yml?)
+
 Heimdall is a cross-platform open-source tool suite used to flash
 firmware (aka ROMs) onto Samsung mobile devices.
 
