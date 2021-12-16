@@ -40,12 +40,12 @@ refer to the appropriate platform specific README:
 
 #### Linux
 
- - Linux/README ([online](https://raw.githubusercontent.com/Benjamin-Dobell/Heimdall/master/Linux/README))
+ - Linux/README ([online](Linux/README))
 
 #### OS X
 
- - OSX/README.txt ([online](https://raw.githubusercontent.com/Benjamin-Dobell/Heimdall/master/OSX/README.txt))
+ - OSX/README.txt ([online](OSX/README.txt))
 
 #### Windows
 
- - Win32/README.txt ([online](https://raw.githubusercontent.com/Benjamin-Dobell/Heimdall/master/Win32/README.txt))
+ - Win32/README.txt ([online](Win32/README.txt))
