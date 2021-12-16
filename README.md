@@ -20,7 +20,7 @@ Heimdall communicate via the custom Samsung-developed protocol
 typically referred to as the 'Odin 3 protocol'.
 
 USB communication in Heimdall is handled by the popular open-source
-USB library, [libusb](http://libusb.info).
+USB library, [libusb](https://libusb.info).
 
 ## Free & Open Source
 
