@@ -312,12 +312,12 @@ bool BridgeManager::InitialiseProtocol(void)
 
 	if (libusb_reset_device(deviceHandle))
 	{
-		Interface::PrintError("Failed to reset device!");
+		Interface::PrintError("Failed to reset device!\n");
 	}
 
 	if (!SendBulkTransfer(dataBuffer, 4, 1000))
 	{
-		Interface::PrintError("Failed to send handshake!");
+		Interface::PrintError("Failed to send handshake!\n");
 	}
 
 	// Expect "LOKE"
@@ -468,7 +468,7 @@ int BridgeManager::Initialise(bool resume)
 	if (result != LIBUSB_SUCCESS)
 	{
 		Interface::PrintError("Failed to initialise libusb. libusb error: %d\n", result);
-		Interface::Print("Failed to connect to device!");
+		Interface::Print("Failed to connect to device!\n");
 		return (BridgeManager::kInitialiseFailed);
 	}
 
