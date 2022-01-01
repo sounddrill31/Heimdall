@@ -408,29 +408,8 @@ bool BridgeManager::DetectDevice(void)
 		return (false);
 	}
 
-	// Setup libusb log level.
-	switch (usbLogLevel)
-	{
-		case UsbLogLevel::None:
-			libusb_set_option(libusbContext, LIBUSB_OPTION_LOG_LEVEL, LIBUSB_LOG_LEVEL_NONE);
-			break;
-
-		case UsbLogLevel::Error:
-			libusb_set_option(libusbContext, LIBUSB_OPTION_LOG_LEVEL, LIBUSB_LOG_LEVEL_ERROR);
-			break;
-
-		case UsbLogLevel::Warning:
-			libusb_set_option(libusbContext, LIBUSB_OPTION_LOG_LEVEL, LIBUSB_LOG_LEVEL_WARNING);
-			break;
-
-		case UsbLogLevel::Info:
-			libusb_set_option(libusbContext, LIBUSB_OPTION_LOG_LEVEL, LIBUSB_LOG_LEVEL_INFO);
-			break;
-
-		case UsbLogLevel::Debug:
-			libusb_set_option(libusbContext, LIBUSB_OPTION_LOG_LEVEL, LIBUSB_LOG_LEVEL_DEBUG);
-			break;
-	}
+	// Set libusb log level.
+	SetUsbLogLevel(usbLogLevel);
 
 	// Get handle to Galaxy S device
 	struct libusb_device **devices;
@@ -474,28 +453,7 @@ int BridgeManager::Initialise(bool resume)
 	}
 
 	// Setup libusb log level.
-	switch (usbLogLevel)
-	{
-		case UsbLogLevel::None:
-			libusb_set_option(libusbContext, LIBUSB_OPTION_LOG_LEVEL, LIBUSB_LOG_LEVEL_NONE);
-			break;
-
-		case UsbLogLevel::Error:
-			libusb_set_option(libusbContext, LIBUSB_OPTION_LOG_LEVEL, LIBUSB_LOG_LEVEL_ERROR);
-			break;
-
-		case UsbLogLevel::Warning:
-			libusb_set_option(libusbContext, LIBUSB_OPTION_LOG_LEVEL, LIBUSB_LOG_LEVEL_WARNING);
-			break;
-
-		case UsbLogLevel::Info:
-			libusb_set_option(libusbContext, LIBUSB_OPTION_LOG_LEVEL, LIBUSB_LOG_LEVEL_INFO);
-			break;
-
-		case UsbLogLevel::Debug:
-			libusb_set_option(libusbContext, LIBUSB_OPTION_LOG_LEVEL, LIBUSB_LOG_LEVEL_DEBUG);
-			break;
-	}
+	SetUsbLogLevel(usbLogLevel);
 
 	result = FindDeviceInterface();
 
