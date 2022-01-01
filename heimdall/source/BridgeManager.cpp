@@ -422,7 +422,8 @@ bool BridgeManager::DetectDevice(void)
 
 		for (int i = 0; i < BridgeManager::kSupportedDeviceCount; i++)
 		{
-			if (descriptor.idVendor == supportedDevices[i].vendorId && descriptor.idProduct == supportedDevices[i].productId)
+			if (descriptor.idVendor == supportedDevices[i].vendorId &&
+			    descriptor.idProduct == supportedDevices[i].productId)
 			{
 				libusb_free_device_list(devices, deviceCount);
 
