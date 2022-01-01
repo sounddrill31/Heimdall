@@ -80,16 +80,17 @@ int BridgeManager::FindDeviceInterface(void)
 	Interface::Print("Detecting device...\n");
 
 	struct libusb_device **devices;
-	int deviceCount = libusb_get_device_list(libusbContext, &devices);
+	unsigned int deviceCount = libusb_get_device_list(libusbContext, &devices);
 
-	for (int deviceIndex = 0; deviceIndex < deviceCount; deviceIndex++)
+	for (unsigned int deviceIndex = 0; deviceIndex < deviceCount; deviceIndex++)
 	{
 		libusb_device_descriptor descriptor;
 		libusb_get_device_descriptor(devices[deviceIndex], &descriptor);
 
 		for (int i = 0; i < BridgeManager::kSupportedDeviceCount; i++)
 		{
-			if (descriptor.idVendor == supportedDevices[i].vendorId && descriptor.idProduct == supportedDevices[i].productId)
+			if (descriptor.idVendor == supportedDevices[i].vendorId &&
+			    descriptor.idProduct == supportedDevices[i].productId)
 			{
 				heimdallDevice = devices[deviceIndex];
 				libusb_ref_device(heimdallDevice);
@@ -495,7 +496,7 @@ int BridgeManager::Initialise(bool resume)
 			libusb_set_option(libusbContext, LIBUSB_OPTION_LOG_LEVEL, LIBUSB_LOG_LEVEL_DEBUG);
 			break;
 	}
-	
+
 	result = FindDeviceInterface();
 
 	if (result != BridgeManager::kInitialiseSucceeded)
@@ -949,7 +950,7 @@ int BridgeManager::ReceivePitFile(unsigned char **pitBuffer) const
 		}
 
 		int receiveEmptyTransferFlags = (i == transferCount - 1) ? kEmptyTransferAfter : kEmptyTransferNone;
-		
+
 		ReceiveFilePartPacket *receiveFilePartPacket = new ReceiveFilePartPacket();
 		success = ReceivePacket(receiveFilePartPacket, kDefaultTimeoutReceive, receiveEmptyTransferFlags);
 
