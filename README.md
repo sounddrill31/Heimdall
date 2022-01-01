@@ -53,3 +53,8 @@ refer to the appropriate platform specific README:
 #### Windows
 
  - Win32/README.txt ([online](Win32/README.txt))
+
+### Odin protocol and PIT format
+
+For more details on the Odin protocol, and the PIT files, see the
+external project [samsung-loki/samsung-docs](https://samsung-loki.github.io/samsung-docs/).
