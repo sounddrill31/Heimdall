@@ -1088,12 +1088,15 @@ bool BridgeManager::SendFile(FILE *file, unsigned int destination, unsigned int 
 
 			delete sendFilePartResponse;
 
-			if (!success)
+			if (filePartIndex == 0)
 			{
-				Interface::PrintErrorSameLine("\n");
-				Interface::PrintError("Failed to receive file part response!\n");
-
-				for (int retry = 0; retry < 4; retry++)
+				// Hack
+				success = true;
+				receivedPartIndex = filePartIndex;
+			}
+			else
+			{
+				for (int retry = 0; retry < 4; ++retry)
 				{
 					Interface::PrintErrorSameLine("\n");
 					Interface::PrintError("Retrying...");
@@ -1106,7 +1109,7 @@ bool BridgeManager::SendFile(FILE *file, unsigned int destination, unsigned int 
 					if (!success)
 					{
 						Interface::PrintErrorSameLine("\n");
-						Interface::PrintError("Failed to send file part packet!\n");
+						Interface::PrintError("Failed to send file part packet 2!\n");
 						return (false);
 					}
 
