@@ -211,7 +211,7 @@ void Interface::PrintPit(const PitData *pitData)
 	Interface::Print("Entry Count: %d\n", pitData->GetEntryCount());
 	Interface::Print("Unknown string: %s\n", pitData->GetComTar2());
 	Interface::Print("CPU/bootloader tag: %s\n", pitData->GetCpuBlId());
-	Interface::Print("Version(?): 0x%04x\n", pitData->GetUnknown());
+	Interface::Print("Logic unit count: %d\n", pitData->GetLUCount());
 
 	for (unsigned int i = 0; i < pitData->GetEntryCount(); i++)
 	{

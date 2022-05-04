@@ -261,12 +261,12 @@ namespace libpit
 
 		private:
 
-			unsigned int entryCount;         // 0x04
-			char com_tar2[8+1];              // 0x08
+			unsigned int entryCount; // 0x04
+			char com_tar2[8+1];      // 0x08
 
-			char cpu_bl_id[8+1];             // 0x10
+			char cpu_bl_id[8+1];     // 0x10
 
-			unsigned short unknown_version;  // 0x18
+			unsigned short luCount;  // 0x18
 
 			// Entries start at 0x1C
 			std::vector<PitEntry *> entries;
@@ -375,9 +375,9 @@ namespace libpit
 				return cpu_bl_id;
 			}
 
-			unsigned int GetUnknown(void) const
+			unsigned int GetLUCount(void) const
 			{
-				return unknown_version;
+				return luCount;
 			}
 	};
 }
