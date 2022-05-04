@@ -69,7 +69,7 @@ PitData::PitData()
 	com_tar2[0] = '\0';
 	cpu_bl_id[0] = '\0';
 
-	protocol_version = 0;
+	unknown_version = 0;
 }
 
 PitData::~PitData()
@@ -98,7 +98,7 @@ bool PitData::Unpack(const unsigned char *data)
 		return (false);
 	cpu_bl_id[8]='\0';
 
-	protocol_version = PitData::UnpackShort(data, 24);
+	unknown_version = PitData::UnpackShort(data, 24);
 
 	unsigned int integerValue;
 	unsigned int entryOffset;
@@ -153,7 +153,7 @@ void PitData::Pack(unsigned char *data) const
 	memcpy(&data[8], com_tar2, 8);
 	memcpy(&data[16], cpu_bl_id, 8);
 
-	PitData::PackShort(data, 24, protocol_version);
+	PitData::PackShort(data, 24, unknown_version);
 
 	int entryOffset;
 
@@ -187,7 +187,7 @@ bool PitData::Matches(const PitData *otherPitData) const
 	if (entryCount == otherPitData->entryCount &&
 	    (strncmp(com_tar2, otherPitData->com_tar2, 8) == 0) &&
 	    (strncmp(cpu_bl_id, otherPitData->cpu_bl_id, 8) == 0) &&
-	    protocol_version == otherPitData->protocol_version)
+	    unknown_version == otherPitData->unknown_version)
 	{
 		for (unsigned int i = 0; i < entryCount; i++)
 		{
@@ -211,7 +211,7 @@ void PitData::Clear(void)
 
 	cpu_bl_id[0] = '\0';
 
-	protocol_version = 0;
+	unknown_version = 0;
 
 	for (unsigned int i = 0; i < entries.size(); i++)
 		delete entries[i];
