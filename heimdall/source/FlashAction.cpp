@@ -303,11 +303,11 @@ static bool flashPartitions(BridgeManager *bridgeManager, const vector<Partition
 		{
 			const PitEntry *part = pitData->FindEntry(it->argumentName);
 			if (part->GetDeviceType() != PitEntry::kDeviceTypeMMC &&
-			    part->GetDeviceType() != PitEntry::kDeviceTypeMMC4096)
+			    part->GetDeviceType() != PitEntry::kDeviceTypeUFS)
 				continue;
 			unsigned long partitionSize = part->GetBlockCount();
 			unsigned int blockSize = 512;
-			if (part->GetDeviceType() == PitEntry::kDeviceTypeMMC4096)
+			if (part->GetDeviceType() == PitEntry::kDeviceTypeUFS)
 				blockSize = 4096;
 			if (partitionSize > 0 && it->fileSize > partitionSize*blockSize)
 			{

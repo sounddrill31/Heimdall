@@ -62,7 +62,7 @@ namespace libpit
 				kDeviceTypeFile, // FAT
 				kDeviceTypeMMC,
 				kDeviceTypeAll, // ?
-				kDeviceTypeMMC4096 = 8 // block size 4096
+				kDeviceTypeUFS = 8
 			};
 
 			enum
