@@ -116,15 +116,15 @@ static bool openFiles(Arguments& arguments, vector<PartitionFile>& partitionFile
 		{
 			const StringArgument *stringArgument = static_cast<const StringArgument *>(*it);
 			FILE *file = FileOpen(stringArgument->GetValue().c_str(), "rb");
-			FileSeek(file, 0, SEEK_END);
-			unsigned long fileSize = (unsigned long)FileTell(file);
-			FileRewind(file);
-
 			if (!file)
 			{
 				Interface::PrintError("Failed to open file \"%s\"\n", stringArgument->GetValue().c_str());
 				return (false);
 			}
+
+			FileSeek(file, 0, SEEK_END);
+			unsigned long fileSize = (unsigned long)FileTell(file);
+			FileRewind(file);
 
 			partitionFiles.push_back(PartitionFile(argumentName.c_str(), file, fileSize));
 		}
