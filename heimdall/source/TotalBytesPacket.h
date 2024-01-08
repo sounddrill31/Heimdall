@@ -21,6 +21,9 @@
 #ifndef TOTALBYTESPACKET_H
 #define TOTALBYTESPACKET_H
 
+// C++ Standard Library
+#include <cstdint>
+
 // Heimdall
 #include "SessionSetupPacket.h"
 
@@ -30,16 +33,16 @@ namespace Heimdall
 	{
 		private:
 
-			unsigned long totalBytes;
+			uint64_t totalBytes;
 
 		public:
 
-			TotalBytesPacket(unsigned long totalBytes) : SessionSetupPacket(SessionSetupPacket::kTotalBytes)
+			TotalBytesPacket(uint64_t totalBytes) : SessionSetupPacket(SessionSetupPacket::kTotalBytes)
 			{
 				this->totalBytes = totalBytes;
 			}
 
-			unsigned long GetTotalBytes(void) const
+			uint64_t GetTotalBytes(void) const
 			{
 				return (totalBytes);
 			}
