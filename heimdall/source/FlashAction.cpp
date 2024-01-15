@@ -288,7 +288,7 @@ static bool flashFile(BridgeManager *bridgeManager, const PartitionFlashInfo& pa
 	}
 }
 
-static bool flashPartitions(BridgeManager *bridgeManager, const vector<PartitionFile>& partitionFiles, const PitData *pitData, bool repartition, bool skip_size_check)
+static bool flashPartitions(BridgeManager *bridgeManager, const vector<PartitionFile>& partitionFiles, const PitData *pitData, bool repartition, bool skipSizeCheck)
 {
 	vector<PartitionFlashInfo> partitionFlashInfos;
 
@@ -297,7 +297,7 @@ static bool flashPartitions(BridgeManager *bridgeManager, const vector<Partition
 		return (false);
 
 	/* Verify that the files we want to flash fit in partitions */
-	if (!skip_size_check)
+	if (!skipSizeCheck)
 	{
 		for (vector<PartitionFile>::const_iterator it = partitionFiles.begin(); it != partitionFiles.end(); it++)
 		{
@@ -486,7 +486,7 @@ int FlashAction::Execute(int argc, char **argv)
 	bool resume = arguments.GetArgument("resume") != nullptr;
 	bool verbose = arguments.GetArgument("verbose") != nullptr;
 	bool tflash = arguments.GetArgument("tflash") != nullptr;
-	bool skip_size_check = arguments.GetArgument("skip-size-check") != nullptr;
+	bool skipSizeCheck = arguments.GetArgument("skip-size-check") != nullptr;
 
 	if (arguments.GetArgument("stdout-errors") != nullptr)
 		Interface::SetStdoutErrors(true);
@@ -590,7 +590,7 @@ int FlashAction::Execute(int argc, char **argv)
 		if (pitData)
 			success = flashPartitions(bridgeManager, partitionFiles,
 						  pitData, repartition,
-						  skip_size_check);
+						  skipSizeCheck);
 		else
 			success = false;
 
