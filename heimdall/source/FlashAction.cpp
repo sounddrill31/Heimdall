@@ -486,7 +486,8 @@ int FlashAction::Execute(int argc, char **argv)
 	bool resume = arguments.GetArgument("resume") != nullptr;
 	bool verbose = arguments.GetArgument("verbose") != nullptr;
 	bool tflash = arguments.GetArgument("tflash") != nullptr;
-	bool skipSizeCheck = arguments.GetArgument("skip-size-check") != nullptr;
+	// If we are flashing to sdcard we can ignore size of partition in PIT
+	bool skipSizeCheck = (arguments.GetArgument("skip-size-check") != nullptr) || tflash;
 
 	if (arguments.GetArgument("stdout-errors") != nullptr)
 		Interface::SetStdoutErrors(true);
