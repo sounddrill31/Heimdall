@@ -41,16 +41,14 @@ using namespace Heimdall;
 
 map<string, Interface::ActionInfo> actionMap;
 bool stdoutErrors = false;
-		
+
 const char *version = "v2.0.2";
 const char *actionUsage = "Usage: heimdall <action> <action arguments>\n";
 
 const char *releaseInfo = "Heimdall %s\n\n\
 Copyright (c) 2010-2017 Benjamin Dobell, Glass Echidna\n\
 https://www.glassechidna.com.au/\n\n\
-This software is provided free of charge. Copying and redistribution is\nencouraged.\n\n\
-If you appreciate this software and you would like to support future\ndevelopment please consider donating:\n\
-https://www.glassechidna.com.au/donate/\n\n";
+This software is provided free of charge. Copying and redistribution is\nencouraged.\n\n";
 
 static const char *extraInfo = "Heimdall utilises libusb for all USB communication:\n\
     https://www.libusb.info/\n\

@@ -1913,12 +1913,6 @@
     </property>
     <addaction name="actionAboutHeimdall"/>
    </widget>
-   <widget class="QMenu" name="menuDonate">
-    <property name="title">
-     <string>Donate</string>
-    </property>
-    <addaction name="actionDonate"/>
-   </widget>
    <widget class="QMenu" name="menuAdvanced">
     <property name="title">
      <string>Advanced</string>
@@ -1927,7 +1921,6 @@
     <addaction name="separator"/>
     <addaction name="actionVerboseOutput"/>
    </widget>
-   <addaction name="menuDonate"/>
    <addaction name="menuAdvanced"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -1939,11 +1932,6 @@
   <action name="actionAboutHeimdall">
    <property name="text">
     <string>About Heimdall</string>
-   </property>
-  </action>
-  <action name="actionDonate">
-   <property name="text">
-    <string>Donate to Glass Echidna</string>
    </property>
   </action>
   <action name="actionPackage_Creation">

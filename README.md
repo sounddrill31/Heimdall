@@ -31,11 +31,10 @@ USB library, [libusb](https://libusb.info).
 Heimdall is both free and open source. It is licensed under the MIT
 license (see LICENSE).
 
-Heimdall is maintained and predominantly developed by [Glass
+Heimdall has been developed through countless hours of reverse
+engineering work, predominantly by [Glass
 Echidna](https://glassechidna.com.au/), a _tiny_ independent software
-development company. If you appreciate our work and would like to
-support future development please consider making a
-[donation](https://glassechidna.com.au/donate/).
+development company.
 
 ## Documentation
 
