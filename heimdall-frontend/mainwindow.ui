@@ -857,10 +857,29 @@
         </rect>
        </property>
        <property name="toolTip">
-        <string notr="true">Resume flash action, to be used after "No Reboot" was used.</string>
+        <string notr="true">Resume flash action, to be used after &quot;No Reboot&quot; was used.</string>
        </property>
        <property name="text">
         <string>Resume (use after &quot;No Reboot&quot;)</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="waitForDeviceCheckbox">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>90</y>
+         <width>211</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string notr="true">If enabled then Heimdall waits until a compatible device is connected and then flashes.</string>
+       </property>
+       <property name="text">
+        <string>Wait for device</string>
        </property>
       </widget>
       <widget class="QPushButton" name="startFlashButton">

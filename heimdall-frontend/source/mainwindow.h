@@ -104,6 +104,7 @@ namespace HeimdallFrontend
 
 			bool verboseOutput;
 			bool resume;
+			bool waitForDevice;
 
 
 			void StartHeimdall(const QStringList& arguments);
@@ -160,6 +161,8 @@ namespace HeimdallFrontend
 			void SetNoReboot(int enabled);
 			void SetResume(bool enabled);
 			void SetResume(int enabled);
+			void SetWaitForDevice(bool enabled);
+			void SetWaitForDevice(int enabled);
 
 			void StartFlash(void);
 
@@ -181,7 +184,7 @@ namespace HeimdallFrontend
 			void SelectDevice(int row);
 			void AddDevice(void);
 			void RemoveDevice(void);
-			
+
 			void BuildPackage(void);
 
 			// Utilities Tab

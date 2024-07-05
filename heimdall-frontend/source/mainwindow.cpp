@@ -264,6 +264,7 @@ void MainWindow::UpdateFlashInterfaceAvailability(void)
 		startFlashButton->setEnabled(validFlashSettings);
 		noRebootCheckBox->setEnabled(validFlashSettings);
 		resumeCheckbox->setEnabled(validFlashSettings);
+		waitForDeviceCheckbox->setEnabled(validFlashSettings);
 	}
 	else
 	{
@@ -398,6 +399,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 	verboseOutput = false;
 	resume = false;
+	waitForDevice = false;
 
 	tabIndex = functionTabWidget->currentIndex();
 	functionTabWidget->setTabEnabled(functionTabWidget->indexOf(createPackageTab), false);
@@ -430,6 +432,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 	QObject::connect(noRebootCheckBox, SIGNAL(stateChanged(int)), this, SLOT(SetNoReboot(int)));
 	QObject::connect(resumeCheckbox, SIGNAL(stateChanged(int)), this, SLOT(SetResume(int)));
+	QObject::connect(waitForDeviceCheckbox, SIGNAL(stateChanged(int)), this, SLOT(SetWaitForDevice(int)));
 	
 	QObject::connect(startFlashButton, SIGNAL(clicked()), this, SLOT(StartFlash()));
 
@@ -900,6 +903,17 @@ void MainWindow::SetResume(int enabled)
 	SetResume(enabled != 0);
 }
 
+void MainWindow::SetWaitForDevice(bool enabled)
+{
+	waitForDevice = enabled;
+	waitForDeviceCheckbox->setChecked(enabled);
+}
+
+void MainWindow::SetWaitForDevice(int enabled)
+{
+	SetWaitForDevice(enabled != 0);
+}
+
 void MainWindow::StartFlash(void)
 {
 	outputPlainTextEdit->clear();
@@ -935,6 +949,9 @@ void MainWindow::StartFlash(void)
 
 	if (resume)
 		arguments.append("--resume");
+
+	if (waitForDevice)
+		arguments.append("--wait");
 
 	if (verboseOutput)
 		arguments.append("--verbose");
@@ -1089,6 +1106,9 @@ void MainWindow::DetectDevice(void)
 	QStringList arguments;
 	arguments.append("detect");
 
+	if (waitForDevice)
+		arguments.append("--wait");
+
 	if (verboseOutput)
 		arguments.append("--verbose");
 
@@ -1109,6 +1129,9 @@ void MainWindow::ClosePcScreen(void)
 	
 	if (resume)
 		arguments.append("--resume");
+
+	if (waitForDevice)
+		arguments.append("--wait");
 
 	if (verboseOutput)
 		arguments.append("--verbose");
@@ -1151,6 +1174,9 @@ void MainWindow::DownloadPit(void)
 
 	if (resume)
 		arguments.append("--resume");
+
+	if (waitForDevice)
+		arguments.append("--wait");
 
 	if (verboseOutput)
 		arguments.append("--verbose");
