@@ -29,7 +29,7 @@ include(CheckIncludeFile)
 # development packages from their distros package repository. Windows users will
 # likely want to fetch a binary distribution, hence the Windows-oriented default.
 #
-# See http://www.libusb.org/wiki/windows_backend#LatestBinarySnapshots
+# See https://github.com/libusb/libusb/releases/
 if(WIN32)
     set(LIBUSB_PATH
         "C:/Program Files (x86)/libusb-1.0.20"
