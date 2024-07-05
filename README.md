@@ -9,12 +9,9 @@ firmware (aka ROMs) onto Samsung mobile devices.
 
 ## Supported Platforms
 
-Heimdall should work on AMD64/x86-64 (64-bit) or x86 (32-bit)
-computers running GNU/Linux, macOS or Windows.
-
-However, several third-parties have reported success running Heimdall
-on ARM chipsets (in particular Raspberry Pi), as well as additional
-operating systems such as FreeBSD.
+Heimdall should work on most Linux systems, and perhaps even on OSX
+and Windows, though the latter two are not tested by the current
+maintainer.
 
 ## How does Heimdall work?
 
@@ -38,20 +35,26 @@ development company.
 
 ## Documentation
 
-For more details about how to compile and install Heimdall please
-refer to the appropriate platform specific README:
+To compile Heimdall and Heimdall-frontend (the gui application), run
+something like:
 
-#### Linux
+```sh
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make
+```
 
- - Linux/README ([online](Linux/README))
+To only compile the CLI tool, add the option -DDISABLE_FRONTEND=true
+to the cmake command.
 
-#### OS X
+The name of dependencies vary between distributions. On alpinelinux
+you need to install: `make cmake gcc g++ libc-dev qt5-qtbase-dev and
+libusb-dev`, on archlinux: `cmake libusb qt5-base` and on ubuntu: `cmake
+g++ pkg-config libusb-1.0.0-dev qtbase5-dev and zlib1g-dev`.
 
- - OSX/README.txt ([online](OSX/README.txt))
-
-#### Windows
-
- - Win32/README.txt ([online](Win32/README.txt))
+Some more documentation, and instructions on how to use Heimdall and
+Heimdall-frontend, can be found in the doc/ folder.
 
 ### Odin protocol and PIT format
 
