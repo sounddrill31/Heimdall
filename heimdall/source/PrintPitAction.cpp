@@ -34,10 +34,11 @@ using namespace Heimdall;
 
 const char *PrintPitAction::usage = "Action: print-pit\n\
 Arguments: [--file <filename>] [--verbose] [--no-reboot] [--stdout-errors]\n\
-    [--usb-log-level <none/error/warning/debug>]\n\
+    [--usb-log-level <none/error/warning/debug>] [--wait]\n\
 Description: Prints the contents of a PIT file in a human readable format. If\n\
     a filename is not provided then Heimdall retrieves the PIT file from the \n\
-    connected device.\n\
+    connected device. If --wait is used then Heimdall waits until a compatible\n\
+    device is connected.\n\
 Note: --no-reboot causes the device to remain in download mode after the action\n\
       is completed. If you wish to perform another action whilst remaining in\n\
       download mode, then the following action must specify the --resume flag.\n";
@@ -51,6 +52,7 @@ int PrintPitAction::Execute(int argc, char **argv)
 	argumentTypes["no-reboot"] = kArgumentTypeFlag;
 	argumentTypes["resume"] = kArgumentTypeFlag;
 	argumentTypes["verbose"] = kArgumentTypeFlag;
+	argumentTypes["wait"] = kArgumentTypeFlag;
 	argumentTypes["stdout-errors"] = kArgumentTypeFlag;
 	argumentTypes["usb-log-level"] = kArgumentTypeString;
 
@@ -67,7 +69,8 @@ int PrintPitAction::Execute(int argc, char **argv)
 	bool reboot = arguments.GetArgument("no-reboot") == nullptr;
 	bool resume = arguments.GetArgument("resume") != nullptr;
 	bool verbose = arguments.GetArgument("verbose") != nullptr;
-	
+	bool waitForDevice = arguments.GetArgument("wait") != nullptr;
+
 	if (arguments.GetArgument("stdout-errors") != nullptr)
 		Interface::SetStdoutErrors(true);
 
@@ -156,7 +159,7 @@ int PrintPitAction::Execute(int argc, char **argv)
 	{
 		// Print PIT from a device.
 
-		BridgeManager *bridgeManager = new BridgeManager(verbose);
+		BridgeManager *bridgeManager = new BridgeManager(verbose, waitForDevice);
 		bridgeManager->SetUsbLogLevel(usbLogLevel);
 
 		if (bridgeManager->Initialise(resume) != BridgeManager::kInitialiseSucceeded || !bridgeManager->BeginSession())

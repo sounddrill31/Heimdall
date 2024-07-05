@@ -43,14 +43,15 @@ Arguments:\n\
     [--<partition name> <filename> ...]\n\
     [--<partition identifier> <filename> ...]\n\
     [--pit <filename>] [--verbose] [--no-reboot] [--resume] [--stdout-errors]\n\
-    [--usb-log-level <none/error/warning/debug>]\n\
+    [--usb-log-level <none/error/warning/debug>] [--skip-size-check] [--wait]\n\
   or:\n\
     --repartition --pit <filename> [--<partition name> <filename> ...]\n\
     [--<partition identifier> <filename> ...] [--verbose] [--no-reboot]\n\
     [--resume] [--stdout-errors] [--usb-log-level <none/error/warning/debug>]\n\
-    [--tflash] [--skip-size-check]\n\
+    [--tflash] [--skip-size-check] [--wait]\n\
 Description: Flashes one or more firmware files to your phone. Partition names\n\
     (or identifiers) can be obtained by executing the print-pit action.\n\
+    With --wait Heimdall waits until a compatible device is connected.\n\
     T-Flash mode allows to flash the inserted SD-card instead of the internal MMC.\n\
     Use --skip-size-check to not verify that files fit in the specified partition.\n\
 Note: --no-reboot causes the device to remain in download mode after the action\n\
@@ -478,6 +479,7 @@ int FlashAction::Execute(int argc, char **argv)
 	argumentTypes["verbose"] = kArgumentTypeFlag;
 	argumentTypes["stdout-errors"] = kArgumentTypeFlag;
 	argumentTypes["usb-log-level"] = kArgumentTypeString;
+	argumentTypes["wait"] = kArgumentTypeFlag;
 	argumentTypes["tflash"] = kArgumentTypeFlag;
 	argumentTypes["skip-size-check"] = kArgumentTypeFlag;
 
@@ -508,6 +510,7 @@ int FlashAction::Execute(int argc, char **argv)
 	bool resume = arguments.GetArgument("resume") != nullptr;
 	bool verbose = arguments.GetArgument("verbose") != nullptr;
 	bool tflash = arguments.GetArgument("tflash") != nullptr;
+	bool waitForDevice = arguments.GetArgument("wait") != nullptr;
 	// If we are flashing to sdcard we can ignore size of partition in PIT
 	bool skipSizeCheck = (arguments.GetArgument("skip-size-check") != nullptr) || tflash;
 
@@ -585,7 +588,7 @@ int FlashAction::Execute(int argc, char **argv)
 
 	// Perform flash
 
-	BridgeManager *bridgeManager = new BridgeManager(verbose);
+	BridgeManager *bridgeManager = new BridgeManager(verbose, waitForDevice);
 	bridgeManager->SetUsbLogLevel(usbLogLevel);
 
 	if (bridgeManager->Initialise(resume) != BridgeManager::kInitialiseSucceeded || !bridgeManager->BeginSession())

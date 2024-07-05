@@ -29,9 +29,11 @@ using namespace std;
 using namespace Heimdall;
 
 const char *DetectAction::usage = "Action: detect\n\
-Arguments: [--verbose] [--stdout-errors]\n\
+Arguments: [--wait] [--verbose] [--stdout-errors]\n\
            [--usb-log-level <none/error/warning/debug>]\n\
-Description: Indicates whether or not a download mode device can be detected.\n";
+Description: Indicates whether or not a download mode device can be detected.\n\
+             Returns instantly per default, or waits until device is found\n\
+             when --wait argument is used.\n";
 
 int DetectAction::Execute(int argc, char **argv)
 {
@@ -39,6 +41,7 @@ int DetectAction::Execute(int argc, char **argv)
 
 	map<string, ArgumentType> argumentTypes;
 	argumentTypes["verbose"] = kArgumentTypeFlag;
+	argumentTypes["wait"] = kArgumentTypeFlag;
 	argumentTypes["stdout-errors"] = kArgumentTypeFlag;
 	argumentTypes["usb-log-level"] = kArgumentTypeString;
 
@@ -50,8 +53,10 @@ int DetectAction::Execute(int argc, char **argv)
 		return (0);
 	}
 
+	bool waitForDevice = arguments.GetArgument("wait") != nullptr;
+
 	bool verbose = arguments.GetArgument("verbose") != nullptr;
-	
+
 	if (arguments.GetArgument("stdout-errors") != nullptr)
 		Interface::SetStdoutErrors(true);
 
@@ -93,7 +98,7 @@ int DetectAction::Execute(int argc, char **argv)
 
 	// Download PIT file from device.
 
-	BridgeManager *bridgeManager = new BridgeManager(verbose);
+	BridgeManager *bridgeManager = new BridgeManager(verbose, waitForDevice);
 	bridgeManager->SetUsbLogLevel(usbLogLevel);
 
 	bool detected = bridgeManager->DetectDevice();

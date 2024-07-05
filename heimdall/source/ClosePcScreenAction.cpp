@@ -104,7 +104,7 @@ int ClosePcScreenAction::Execute(int argc, char **argv)
 
 	// Download PIT file from device.
 
-	BridgeManager *bridgeManager = new BridgeManager(verbose);
+	BridgeManager *bridgeManager = new BridgeManager(verbose, false);
 	bridgeManager->SetUsbLogLevel(usbLogLevel);
 
 	if (bridgeManager->Initialise(resume) != BridgeManager::kInitialiseSucceeded || !bridgeManager->BeginSession())
