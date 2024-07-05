@@ -857,7 +857,7 @@
         </rect>
        </property>
        <property name="toolTip">
-        <string notr="true">Can be enabled to prevent your device rebooting after the flash finishes.</string>
+        <string notr="true">Resume flash action, to be used after "No Reboot" was used.</string>
        </property>
        <property name="text">
         <string>Resume (use after &quot;No Reboot&quot;)</string>
