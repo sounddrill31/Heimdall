@@ -481,7 +481,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::OpenDonationWebpage(void)
 {
-	QDesktopServices::openUrl(QUrl("http://www.glassechidna.com.au/donate/", QUrl::StrictMode));
+	QDesktopServices::openUrl(QUrl("https://www.glassechidna.com.au/donate/", QUrl::StrictMode));
 }
 
 void MainWindow::SetVerboseOutput(bool enabled)
