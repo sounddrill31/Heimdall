@@ -46,9 +46,9 @@ const char *version = "v2.0.2";
 const char *actionUsage = "Usage: heimdall <action> <action arguments>\n";
 
 const char *releaseInfo = "Heimdall %s\n\n\
-Copyright (c) 2010-2017 Benjamin Dobell, Glass Echidna\n\
-https://www.glassechidna.com.au/\n\n\
-This software is provided free of charge. Copying and redistribution is\nencouraged.\n\n";
+Copyright (c) 2010-2017 Benjamin Dobell, Glass Echidna https://glassechidna.com.au\n\
+Copyright (c) 2021-2024 Henrik Grimler\n\
+This software is provided free of charge. Copying and redistribution is encouraged.\n\n";
 
 static const char *extraInfo = "Heimdall utilises libusb for all USB communication:\n\
     https://www.libusb.info/\n\
