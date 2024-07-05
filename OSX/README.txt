@@ -6,22 +6,9 @@ DISCLAIMER:
     This software attempts to flash your Galaxy S device. The very nature of
     flashing is dangerous. As with all flashing software, Heimdall has the
     potential to damage (brick) your device if not used carefully. If you're
-    concerned, don't use this software. Flashing ROMs onto your phone may also
+    concerned, don't use this software. Flashing ROMs onto your device may also
     void your warranty. Benjamin Dobell and Glass Echidna are not responsible
     for the result of your actions.
-
-
-These instructions are for OS X operating systems.
-
-
-Installing Heimdall and Heimdall Frontend Binaries:
-
-    1. Run "Heimdall Suite.pkg" and follow the instructions.
-
-    2. Reboot your system.
-
-    3. Done
-
 
 
 Flashing Heimdall Firmware Package with Heimdall Frontend:
