@@ -1084,7 +1084,7 @@ bool BridgeManager::SendFile(FILE *file, unsigned int destination, unsigned int 
 			// Response
 			SendFilePartResponse *sendFilePartResponse = new SendFilePartResponse();
 			success = ReceivePacket(sendFilePartResponse);
-			int receivedPartIndex = sendFilePartResponse->GetPartIndex();
+			unsigned int receivedPartIndex = sendFilePartResponse->GetPartIndex();
 
 			delete sendFilePartResponse;
 
