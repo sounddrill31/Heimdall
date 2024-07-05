@@ -78,32 +78,42 @@ enum
 
 int BridgeManager::FindDeviceInterface(void)
 {
-	Interface::Print("Detecting device...\n");
+	if (waitForDevice)
+		Interface::Print("Waiting for device...\n");
+	else
+		Interface::Print("Detecting device...\n");
 
 	struct libusb_device **devices;
-	unsigned int deviceCount = libusb_get_device_list(libusbContext, &devices);
-
-	for (unsigned int deviceIndex = 0; deviceIndex < deviceCount; deviceIndex++)
+	unsigned int deviceCount, deviceIndex, i;
+	libusb_device_descriptor descriptor;
+	while (true)
 	{
-		libusb_device_descriptor descriptor;
-		libusb_get_device_descriptor(devices[deviceIndex], &descriptor);
+		deviceCount = libusb_get_device_list(libusbContext, &devices);
 
-		for (int i = 0; i < BridgeManager::kSupportedDeviceCount; i++)
+		for (deviceIndex = 0; deviceIndex < deviceCount; deviceIndex++)
 		{
-			if (descriptor.idVendor == supportedDevices[i].vendorId &&
-			    descriptor.idProduct == supportedDevices[i].productId)
+			libusb_get_device_descriptor(devices[deviceIndex], &descriptor);
+
+			for (i = 0; i < BridgeManager::kSupportedDeviceCount; i++)
 			{
-				heimdallDevice = devices[deviceIndex];
-				libusb_ref_device(heimdallDevice);
-				break;
+				if (descriptor.idVendor == supportedDevices[i].vendorId &&
+				    descriptor.idProduct == supportedDevices[i].productId)
+				{
+					heimdallDevice = devices[deviceIndex];
+					libusb_ref_device(heimdallDevice);
+					break;
+				}
 			}
 		}
-
 		if (heimdallDevice)
 			break;
-	}
 
-	libusb_free_device_list(devices, deviceCount);
+		libusb_free_device_list(devices, deviceCount);
+		if (waitForDevice)
+			Sleep(1000);
+		else
+			break;
+	}
 
 	if (!heimdallDevice)
 	{
@@ -361,9 +371,10 @@ bool BridgeManager::InitialiseProtocol(void)
 	return (false);
 }
 
-BridgeManager::BridgeManager(bool verbose)
+BridgeManager::BridgeManager(bool verbose, bool waitForDevice)
 {
 	this->verbose = verbose;
+	this->waitForDevice = waitForDevice;
 
 	libusbContext = nullptr;
 	deviceHandle = nullptr;
@@ -415,33 +426,42 @@ bool BridgeManager::DetectDevice(void)
 		return (false);
 	}
 
+	if (waitForDevice)
+		Interface::Print("Waiting for device...\n");
+
 	// Set libusb log level.
 	SetUsbLogLevel(usbLogLevel);
 
-	// Get handle to Galaxy S device
 	struct libusb_device **devices;
-	int deviceCount = libusb_get_device_list(libusbContext, &devices);
-
-	for (int deviceIndex = 0; deviceIndex < deviceCount; deviceIndex++)
+	unsigned int deviceCount, deviceIndex, i;
+	libusb_device_descriptor descriptor;
+	while (true)
 	{
-		libusb_device_descriptor descriptor;
-		libusb_get_device_descriptor(devices[deviceIndex], &descriptor);
+		deviceCount = libusb_get_device_list(libusbContext, &devices);
 
-		for (int i = 0; i < BridgeManager::kSupportedDeviceCount; i++)
+		for (deviceIndex = 0; deviceIndex < deviceCount; deviceIndex++)
 		{
-			if (descriptor.idVendor == supportedDevices[i].vendorId &&
-			    descriptor.idProduct == supportedDevices[i].productId)
-			{
-				libusb_free_device_list(devices, deviceCount);
+			libusb_get_device_descriptor(devices[deviceIndex], &descriptor);
 
-				Interface::Print("Device detected\n");
-				return (true);
+			for (i = 0; i < BridgeManager::kSupportedDeviceCount; i++)
+			{
+				if (descriptor.idVendor == supportedDevices[i].vendorId &&
+				    descriptor.idProduct == supportedDevices[i].productId)
+				{
+					libusb_free_device_list(devices, deviceCount);
+
+					Interface::Print("Device detected\n");
+					return (true);
+				}
 			}
 		}
+
+		libusb_free_device_list(devices, deviceCount);
+		if (waitForDevice)
+			Sleep(1000);
+		else
+			break;
 	}
-
-	libusb_free_device_list(devices, deviceCount);
-
 	Interface::PrintDeviceDetectionFailed();
 	return (false);
 }
