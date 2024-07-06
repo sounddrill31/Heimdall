@@ -27,7 +27,7 @@
 using namespace std;
 using namespace Heimdall;
 
-FlagArgument *FlagArgument::ParseArgument(const std::string& name, int argc, char **argv, int& argi)
+FlagArgument *FlagArgument::ParseArgument(const std::string& name, __attribute__((unused)) int argc, __attribute__((unused)) char **argv, __attribute__((unused)) int& argi)
 {
 	return new FlagArgument(name);
 }

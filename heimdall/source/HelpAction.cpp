@@ -28,7 +28,7 @@ using namespace Heimdall;
 const char *HelpAction::usage = "Action: help\n\
 Description: Displays this dialogue.\n";
 
-int HelpAction::Execute(int argc, char **argv)
+int HelpAction::Execute(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 {
 	Interface::PrintUsage();
 	return (0);
