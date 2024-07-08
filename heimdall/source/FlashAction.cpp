@@ -301,7 +301,29 @@ static bool flashPartitions(BridgeManager *bridgeManager, const vector<Partition
 	{
 		for (vector<PartitionFile>::const_iterator it = partitionFiles.begin(); it != partitionFiles.end(); it++)
 		{
-			const PitEntry *part = pitData->FindEntry(it->argumentName);
+			unsigned int partitionIdentifier;
+			const PitEntry *part;
+			if (Utility::ParseUnsignedInt(partitionIdentifier, it->argumentName) == kNumberParsingStatusSuccess)
+			{
+				part = pitData->FindEntry(partitionIdentifier);
+
+				if (!part)
+				{
+					Interface::PrintError("No partition with identifier \"%s\" exists in the specified PIT.\n", it->argumentName);
+					return (false);
+
+				}
+			} else {
+				part = pitData->FindEntry(it->argumentName);
+
+				if (!part)
+				{
+					Interface::PrintError("Partition \"%s\" does not exist in the specified PIT.\n", it->argumentName);
+					return (false);
+
+				}
+			}
+
 			if (part->GetDeviceType() != PitEntry::kDeviceTypeMMC &&
 			    part->GetDeviceType() != PitEntry::kDeviceTypeUFS)
 				continue;
