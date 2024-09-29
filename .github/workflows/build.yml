@@ -3,7 +3,7 @@ name: Heimdall Build and Release
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 jobs:
@@ -35,8 +35,8 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v2
-        tag_name: $VERSION
-        make_latest: true
         with:
+          tag_name: $VERSION
+          make_latest: true
           files: |
               heimdall-$VERSION.zip
