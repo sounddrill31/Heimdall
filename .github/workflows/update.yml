@@ -1,0 +1,20 @@
+name: Sync with Heimdall
+
+on:
+  schedule:
+    - cron: 0 0 * * * # Run daily at midnight
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync with Heimdall
+        run: |
+          git remote add heimdall https://git.sr.ht/~grimler/Heimdall
+          git pull --rebase heimdall master
+          git push origin master
