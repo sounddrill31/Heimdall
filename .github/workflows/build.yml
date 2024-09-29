@@ -1,0 +1,42 @@
+name: Heimdall Build and Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract version from Interface.cpp
+        run: |
+          version=$(grep -oP '(?<=const char \*version = ")[^"]*' heimdall/source/Interface.cpp)
+          version=${version#"v"}
+          echo "VERSION=$version" >> $GITHUB_ENV
+
+      - name: Run build script
+        run: |
+          bash scripts/ubuntu/build.sh
+
+      - name: Zip up builds
+        run: |
+          zip -r heimdall-$VERSION.zip builds/bin/*
+
+      - name: Upload to GitHub Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: heimdall-$VERSION.zip
+          path: heimdall-$VERSION.zip
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        tag_name: $VERSION
+        make_latest: true
+        with:
+          files: |
+              heimdall-$VERSION.zip
