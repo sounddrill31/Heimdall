@@ -25,7 +25,7 @@ jobs:
 
       - name: Zip up builds
         run: |
-          zip -r heimdall-$VERSION.zip builds/bin/*
+          zip -r heimdall-$VERSION.zip build/bin/*
 
       - name: Upload to GitHub Artifacts
         uses: actions/upload-artifact@v4
