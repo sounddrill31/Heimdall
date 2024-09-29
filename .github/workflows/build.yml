@@ -30,12 +30,13 @@ jobs:
       - name: Upload to GitHub Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: heimdall-*.zip
-          path: heimdall-*.zip
+          name: heimdall-${VERSION}.zip
+          path: heimdall-${VERSION}.zip
 
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           make_latest: true
+          tag_name: ${VERSION}
           files: |
-              heimdall-*.zip
+              heimdall-${VERSION}.zip
